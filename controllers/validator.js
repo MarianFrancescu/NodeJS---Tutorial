@@ -24,7 +24,7 @@ const validate = function(req, res, next) {
         err => extractedErrors.push({ [err.param]: err.msg })
     )
 
-    req.status(400).end(errors.array()[0].msg);
+    res.status(400).end(errors.array()[0].msg);
 }
 
 module.exports = {
