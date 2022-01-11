@@ -8,4 +8,5 @@ module.exports = function(router) {
     router.delete('/deleteByName', controller.deleteByName);
     router.post('/addEmployee', controller.addEmployee);
     router.put('/updateEmployee', controller.updateEmployee);
+    router.post('/loginUser', controller.loginUser);
 };

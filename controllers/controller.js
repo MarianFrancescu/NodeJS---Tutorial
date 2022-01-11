@@ -1,4 +1,5 @@
 const Employees = require('./../models/employees');
+const jwt = require('jsonwebtoken');
 
 exports.getDefault = function(req, res) {
     res.send("You are on root route");
@@ -54,4 +55,32 @@ exports.updateEmployee = function(req, res) {
             res.send(err);
         res.end(`Updated ${empName}`);
     });
+};
+
+exports.loginUser = function(req, res) {
+    let empName = req.body.empName;
+    let empPass = req.body.empPass;
+    Employees.find({empName: empName}, function(err, result){
+        if(err)
+            res.send(err);
+        if(result[0].empPass === empPass){
+            jwt.sign({empName: empName}, 
+                "secret", //secret is the key of the token
+                {expiresIn: '1h'}, 
+                function(err, token) {
+                    if(err)
+                        throw err;
+                    res.end(token)
+            });
+        } else {
+            res.end("Login failed");
+        }
+    });
+    // Emp.empName = empName;
+    // Emp.empPass = empPass;
+    // Emp.save({}, function(err){
+    //     if(err)
+    //         res.end(err);
+    //     res.end(`Successfully logged in as ${empName}`);
+    // });
 };
