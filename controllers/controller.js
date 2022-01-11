@@ -1,4 +1,5 @@
 const Employees = require('./../models/employees');
+const w = require('./winston_config');
 const jwt = require('jsonwebtoken');
 
 exports.getDefault = function(req, res) {
@@ -17,11 +18,30 @@ exports.addWeight = function(req, res) {
 
 exports.getEmployees = function(req, res) {
     Employees.find({}, function(err, results){
-        if(err)
-            res.end(err);
+        if(err){
+            w.log({
+                level: 'error',
+                message: err
+            });
+            res.status(503).send("Server error");
+        }
         res.json(results);
     });
 };
+
+exports.getEmployee = function(req, res) {
+    let empToFind = req.params.employeeName;
+    Employees.find({empName: empToFind}, function(err, results){
+        if(err){
+            w.log({
+                level: 'error',
+                message: err
+            });
+            res.status(503).send("Server error");
+        }
+        res.json(results);
+    })
+}
 
 exports.deleteByName = function(req, res) {
     let empToDelete = req.body.empName;
