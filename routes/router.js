@@ -1,6 +1,10 @@
 const controller = require("./../controllers/controller");
-const authUser = require('./../controllers/auth');
+const {authUser, authRole} = require('./../controllers/auth');
 const { fieldChecks, validate } = require('./../controllers/validator');
+const ROLE = {
+    ADMIN: 'admin',
+    BASIC: 'basic'
+  }
 
 module.exports = function(router) {
     router.get('/', controller.getDefault);
@@ -12,4 +16,5 @@ module.exports = function(router) {
     router.post('/addEmployee', fieldChecks(), validate, controller.addEmployee);
     router.put('/updateEmployee', controller.updateEmployee);
     router.post('/loginUser', controller.loginUser);
+    router.get('/admin', authUser, authRole(ROLE.ADMIN), controller.admin);
 };

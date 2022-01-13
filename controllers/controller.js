@@ -104,3 +104,7 @@ exports.loginUser = function(req, res) {
     //     res.end(`Successfully logged in as ${empName}`);
     // });
 };
+
+exports.admin = function(req, res) {
+    res.send("Admin page");
+}
