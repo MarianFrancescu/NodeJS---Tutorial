@@ -10,7 +10,8 @@ const wSchema = new mongoose.Schema({
     empName: String,
     empPass: String,
     created: { type: Date, default: Date.now },
-    role: { type: String, default: ROLE.BASIC }
+    role: { type: String, default: ROLE.BASIC },
+	empWeights: [{date: Date, weight: Number}]
 },{
     collection: "Employees"
 });

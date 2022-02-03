@@ -13,7 +13,20 @@ exports.aboutUs = function(req, res) {
 exports.addWeight = function(req, res) {
     let empName = req.body.empName;
     let empWeight = req.body.empWeight;
-    res.send(`POST success, you sent ${empName} with weight: ${empWeight}`);
+	let empWeights = {
+		date: new Date(),
+		weight: empWeight
+	}
+	
+	let query = { empName: empName };
+	let data = { $push: {empWeights: empWeights} };
+    Employees.updateOne(query, data, function(err, result) {
+        if(err)
+            res.send(err);
+        res.end(`Updated ${empName}`);
+    });
+	
+    //res.send(`POST success, you sent ${empName} with weight: ${empWeights}`);
 };
 
 exports.getEmployees = function(req, res) {
