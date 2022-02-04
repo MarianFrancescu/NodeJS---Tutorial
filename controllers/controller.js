@@ -21,9 +21,12 @@ exports.addWeight = function(req, res) {
 	let query = { empName: empName };
 	let data = { $push: {empWeights: empWeights} };
     Employees.updateOne(query, data, function(err, result) {
-        if(err)
+        if(err){
             res.send(err);
-        res.end(`Updated ${empName}`);
+        } else {
+            return res.json({message: "Weight added"});
+            // res.send('done');
+        }
     });
 	
     //res.send(`POST success, you sent ${empName} with weight: ${empWeights}`);
@@ -97,16 +100,19 @@ exports.loginUser = function(req, res) {
         if(err)
             res.send(err);
         if(result[0].empPass === empPass){
-            jwt.sign({empName: empName}, 
+            jwt.sign({
+                empName: result[0].empName,
+                userID: result[0]._id
+            }, 
                 "secret", //secret is the key of the token
                 {expiresIn: '1h'}, 
                 function(err, token) {
                     if(err)
                         throw err;
-                    res.end(token)
+                    res.send({token: token})
             });
         } else {
-            res.end("Login failed");
+            res.send({status: "Login failed"});
         }
     });
     // Emp.empName = empName;
